@@ -5,7 +5,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>مێژووی گەلی کورد | کوردستان</title>
   
-  <!-- SEO & Social Media Preview (OpenGraph) -->
+  <!-- PWA & Mobile Web App Meta -->
+  <meta name="theme-color" content="#d4af37">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="مێژووی کورد">
+
+  <!-- SEO & Social Media Preview -->
   <meta name="description" content="گەنجینەیەکی دەوڵەمەندی شارستانیەت و مێژووی کوردستان؛ لە سەردەمە دێرینەکان، سۆمەر و مادەوە تا میرنشینەکان و مێژووی هاوچەرخ.">
   <meta property="og:title" content="مێژووی گەلی کورد | کوردستان">
   <meta property="og:description" content="گەنجینەیەکی مێژوویی سەرچاوەدار دەربارەی سەردەم، شارستانییەت و میرنشینە سەربەخۆکانی کوردستان.">
@@ -64,7 +70,6 @@
     
     .nav-left-actions { display: flex; align-items: center; gap: 12px; }
 
-    /* دوگمەی گۆڕینی دۆخی ڕووناک/تاریک */
     .theme-btn {
       background: none;
       border: 1px solid var(--border);
@@ -196,6 +201,17 @@
     .search-box input:focus { border-color: var(--accent); }
     .search-box i { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--accent); }
 
+    /* بەشی نەخشەی ناوچە مێژووییەکان */
+    .regions-box {
+      max-width: 800px; margin: 0 auto 25px; padding: 12px;
+      display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
+    }
+    .region-tag {
+      background: rgba(212, 175, 55, 0.08); border: 1px dashed var(--accent); color: var(--accent);
+      padding: 5px 12px; border-radius: 8px; font-size: 0.85rem; cursor: pointer; transition: 0.2s;
+    }
+    .region-tag:hover { background: var(--accent); color: #000; }
+
     /* فلتەرەکان */
     .filter-container {
       display: flex;
@@ -224,8 +240,34 @@
     .container { max-width: 1100px; margin: auto; padding: 0 20px; }
     .section-title {
       color: var(--accent); font-size: 1.3rem; margin: 20px 0 20px;
-      display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--border); padding-bottom: 10px;
+      display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 2px solid var(--border); padding-bottom: 10px;
     }
+
+    /* هێڵی کاتیی گرافیکی (Timeline) */
+    .timeline-wrapper {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
+      padding: 20px; margin-bottom: 35px; overflow-x: auto;
+    }
+    .timeline-title { color: var(--accent); font-size: 1.1rem; margin-bottom: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+    .timeline-steps {
+      display: flex; gap: 20px; min-width: 600px; position: relative; padding-bottom: 10px;
+    }
+    .timeline-step {
+      flex: 1; position: relative; text-align: center; cursor: pointer;
+    }
+    .timeline-step::before {
+      content: ''; position: absolute; top: 12px; left: 0; right: 0; height: 3px; background: var(--border); z-index: 1;
+    }
+    .timeline-step:first-child::before { right: 50%; }
+    .timeline-step:last-child::before { left: 50%; }
+    .timeline-dot {
+      width: 26px; height: 26px; border-radius: 50%; background: var(--card-bg);
+      border: 3px solid var(--accent); margin: 0 auto 8px; position: relative; z-index: 2; transition: 0.2s;
+    }
+    .timeline-step:hover .timeline-dot { transform: scale(1.3); background: var(--accent); }
+    .timeline-step span { font-size: 0.85rem; font-weight: 600; color: var(--text-white); display: block; }
+    .timeline-step small { font-size: 0.75rem; color: #8b949e; }
 
     /* کارتەکان */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
@@ -276,6 +318,21 @@
     .btn-delete { background: rgba(230, 57, 70, 0.85); color: #fff; }
     .btn-edit { background: rgba(46, 160, 67, 0.85); color: #fff; }
 
+    /* بەشی پرسیار و وەڵامی مێژوویی (Quiz) */
+    .quiz-section {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
+      padding: 25px; margin-top: 45px; text-align: center;
+    }
+    .quiz-title { color: var(--accent); font-size: 1.3rem; margin-bottom: 8px; }
+    .quiz-question { font-size: 1.1rem; color: var(--text-white); margin: 15px 0; font-weight: 700; }
+    .quiz-options { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; max-width: 600px; margin: 0 auto 15px; }
+    .quiz-opt-btn {
+      background: var(--bg); border: 1px solid var(--border); color: var(--text);
+      padding: 10px; border-radius: 8px; cursor: pointer; font-size: 0.95rem; transition: 0.2s;
+    }
+    .quiz-opt-btn:hover { border-color: var(--accent); }
+    .quiz-score { font-size: 1.1rem; color: var(--accent); font-weight: 700; }
+
     /* مۆدالەکان */
     .modal {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
@@ -305,14 +362,14 @@
     .modal-source i { color: var(--accent); margin-left: 6px; }
 
     .modal-footer-actions {
-      display: flex; gap: 10px; border-top: 1px solid var(--border); padding-top: 15px;
+      display: flex; gap: 10px; border-top: 1px solid var(--border); padding-top: 15px; flex-wrap: wrap;
     }
-    .btn-share {
+    .btn-share, .btn-audio {
       background: transparent; border: 1px solid var(--accent); color: var(--accent);
       padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
       display: flex; align-items: center; gap: 6px; transition: 0.2s;
     }
-    .btn-share:hover { background: var(--accent); color: #000; }
+    .btn-share:hover, .btn-audio:hover { background: var(--accent); color: #000; }
 
     .form-group { margin-bottom: 16px; }
     .form-group label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: var(--text); }
@@ -342,6 +399,10 @@
       transition: 0.2s;
     }
     .back-to-top:hover { transform: translateY(-3px); background: var(--accent-hover); }
+
+    @media (max-width: 600px) {
+      .quiz-options { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -400,6 +461,17 @@
       <input type="text" id="searchInput" placeholder="گەڕان بەناو میرنشین، ساڵ و مێژووەکان..." onkeyup="filterCards()">
     </div>
 
+    <!-- بەستەری خێرای ناوچە و میرنشینەکان -->
+    <div class="regions-box">
+      <span class="region-tag" onclick="quickSearch('ماد')"><i class="fa-solid fa-location-dot"></i> ئیمپراتۆریەتی ماد</span>
+      <span class="region-tag" onclick="quickSearch('سۆران')"><i class="fa-solid fa-location-dot"></i> میرنشینی سۆران</span>
+      <span class="region-tag" onclick="quickSearch('بابان')"><i class="fa-solid fa-location-dot"></i> میرنشینی بابان</span>
+      <span class="region-tag" onclick="quickSearch('بادینان')"><i class="fa-solid fa-location-dot"></i> میرنشینی بادینان</span>
+      <span class="region-tag" onclick="quickSearch('بۆتان')"><i class="fa-solid fa-location-dot"></i> میرنشینی بۆتان</span>
+      <span class="region-tag" onclick="quickSearch('ئەردەڵان')"><i class="fa-solid fa-location-dot"></i> میرنشینی ئەردەڵان</span>
+      <span class="region-tag" onclick="quickSearch('مەهاباد')"><i class="fa-solid fa-location-dot"></i> کۆماری مەهاباد</span>
+    </div>
+
     <div class="filter-container">
       <button class="filter-btn active" onclick="setFilter('all', this)">هەمووی</button>
       <button class="filter-btn" onclick="setFilter('دێرین', this)">سەردەمی دێرین (پ.ز)</button>
@@ -411,13 +483,59 @@
   </section>
 
   <div class="container">
-    <div class="section-title">
-      <i class="fa-solid fa-landmark"></i>
-      <span>تەواوی میرنشین و سەردەمە مێژووییەکان</span>
+    
+    <!-- هێڵی کاتیی گرافیکی (Timeline) -->
+    <div class="timeline-wrapper">
+      <div class="timeline-title"><i class="fa-solid fa-timeline"></i> هێڵی کاتیی سەردەمە گرنگەکانی کوردستان</div>
+      <div class="timeline-steps">
+        <div class="timeline-step" onclick="quickSearch('سۆمەر')">
+          <div class="timeline-dot"></div>
+          <span>سۆمەرییەکان</span>
+          <small>٣٥٠٠ پ.ز</small>
+        </div>
+        <div class="timeline-step" onclick="quickSearch('ماد')">
+          <div class="timeline-dot"></div>
+          <span>ئیمپراتۆریەتیی ماد</span>
+          <small>٦٧٨ پ.ز</small>
+        </div>
+        <div class="timeline-step" onclick="quickSearch('ئەییووبی')">
+          <div class="timeline-dot"></div>
+          <span>دەوڵەتی ئەییووبی</span>
+          <small>١١٧١ ز</small>
+        </div>
+        <div class="timeline-step" onclick="quickSearch('بابان')">
+          <div class="timeline-dot"></div>
+          <span>میرنشینەکان</span>
+          <small>١٥٠٠ – ١٨٥٠ ز</small>
+        </div>
+        <div class="timeline-step" onclick="quickSearch('مەهاباد')">
+          <div class="timeline-dot"></div>
+          <span>کۆماری کوردستان</span>
+          <small>١٩٤٦ ز</small>
+        </div>
+      </div>
     </div>
+
+    <div class="section-title">
+      <div>
+        <i class="fa-solid fa-landmark"></i>
+        <span>تەواوی میرنشین و سەردەمە مێژووییەکان</span>
+      </div>
+    </div>
+    
     <div class="grid" id="historyGrid">
       <div class="loading-msg"><i class="fa-solid fa-spinner fa-spin"></i> زانیارییەکان لە داتابەیسەوە دادەبەزن...</div>
     </div>
+
+    <!-- بەشی تاقیکردنەوەی مێژوویی (Quiz) -->
+    <div class="quiz-section">
+      <div class="quiz-title"><i class="fa-solid fa-graduation-cap"></i> تاقیکردنەوەی خێرای مێژوویی</div>
+      <p style="color: var(--text); font-size: 0.95rem;">زانیارییە مێژووییەکانت لەسەر گەلی کورد تاقی بکەرەوە!</p>
+      <div class="quiz-question" id="quizQuestion">پایتەختی ئیمپراتۆریەتیی ماد کام شارە بووە؟</div>
+      <div class="quiz-options" id="quizOptions"></div>
+      <div class="quiz-score" id="quizResult"></div>
+    </div>
+
   </div>
 
   <!-- مۆدالی بینینی بابەت -->
@@ -436,6 +554,9 @@
       <div class="modal-footer-actions">
         <button class="btn-share" onclick="shareCurrentArticle()">
           <i class="fa-solid fa-share-nodes"></i> هاوبەشکردنی بابەت
+        </button>
+        <button class="btn-audio" onclick="toggleReadAudio()">
+          <i class="fa-solid fa-volume-high" id="audioIcon"></i> <span id="audioBtnText">خوێندنەوەی دەنگی</span>
         </button>
       </div>
     </div>
@@ -488,8 +609,9 @@
     let isAdmin = false;
     let currentFilter = 'all';
     let currentViewingItem = null;
+    let isSpeaking = false;
 
-    // کردارەکانی مۆدی تاریک و ڕووناک
+    // گۆڕینی دۆخی ڕووناک/تاریک
     function toggleTheme() {
       const html = document.documentElement;
       const currentTheme = html.getAttribute('data-theme');
@@ -508,7 +630,6 @@
       }
     }
 
-    // پشکنینی ڕەنگی پێشوو
     const savedTheme = localStorage.getItem('kurdish_theme') || 'dark';
     document.documentElement.setAttribute('data-theme', savedTheme);
     updateThemeIcon(savedTheme);
@@ -643,6 +764,12 @@
       filterCards();
     }
 
+    function quickSearch(word) {
+      document.getElementById("searchInput").value = word;
+      filterCards();
+      window.scrollTo({ top: 350, behavior: 'smooth' });
+    }
+
     function filterCards() {
       const val = document.getElementById("searchInput").value.toLowerCase();
       let filtered = historyItems.filter(item => {
@@ -683,10 +810,12 @@
         sourceWrap.style.display = "none";
       }
 
+      stopSpeech();
       document.getElementById("viewModal").style.display = "flex";
     }
 
     function closeViewModal() {
+      stopSpeech();
       document.getElementById("viewModal").style.display = "none";
       currentViewingItem = null;
     }
@@ -705,6 +834,85 @@
         navigator.clipboard.writeText(`${shareData.title}\n${shareData.url}`);
         alert("بەستەری بابەتەکە بە سەرکەوتوویی کۆپی کرا!");
       }
+    }
+
+    // سیستەمی دەنگ (Text to Speech)
+    function toggleReadAudio() {
+      if (!currentViewingItem) return;
+      if (isSpeaking) {
+        stopSpeech();
+      } else {
+        const text = `${currentViewingItem.title}. ${currentViewingItem.content}`;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'ckb';
+        utterance.onend = stopSpeech;
+        utterance.onerror = stopSpeech;
+        window.speechSynthesis.speak(utterance);
+        isSpeaking = true;
+        document.getElementById("audioBtnText").innerText = "ڕاگرتنی دەنگ";
+        document.getElementById("audioIcon").className = "fa-solid fa-circle-stop";
+      }
+    }
+
+    function stopSpeech() {
+      if (window.speechSynthesis) window.speechSynthesis.cancel();
+      isSpeaking = false;
+      const btn = document.getElementById("audioBtnText");
+      if (btn) btn.innerText = "خوێندنەوەی دەنگی";
+      const icon = document.getElementById("audioIcon");
+      if (icon) icon.className = "fa-solid fa-volume-high";
+    }
+
+    // بەشی پرسیار و وەڵامەکان (Quiz System)
+    const quizData = [
+      {
+        q: "پایتەختی ئیمپراتۆریەتیی ماد کام شارە بووە؟",
+        options: ["هەگبەتانە (هەمەدان)", "نەینەوا", "ئامێدی", "ڕەواندز"],
+        correct: 0
+      },
+      {
+        q: "شەرەفنامە لەلایەن کێوە نووسراوە؟",
+        options: ["ئەحمەدی خانی", "شەرەفخانی بەدلیسی", "مەستوورە ئەردەڵان", "نالی"],
+        correct: 1
+      },
+      {
+        q: "پایتەختی میرنشینی سۆران لە سەردەمی پاشای گەورەدا کوێ بووە؟",
+        options: ["سلێمانی", "دیاربەکر", "ڕەواندز", "مەهاباد"],
+        correct: 2
+      }
+    ];
+
+    let currentQuizIndex = 0;
+
+    function renderQuiz() {
+      const q = quizData[currentQuizIndex];
+      document.getElementById("quizQuestion").innerText = q.q;
+      const optContainer = document.getElementById("quizOptions");
+      optContainer.innerHTML = "";
+      document.getElementById("quizResult").innerText = "";
+
+      q.options.forEach((opt, idx) => {
+        const btn = document.createElement("button");
+        btn.className = "quiz-opt-btn";
+        btn.innerText = opt;
+        btn.onclick = () => checkAnswer(idx);
+        optContainer.appendChild(btn);
+      });
+    }
+
+    function checkAnswer(chosen) {
+      const q = quizData[currentQuizIndex];
+      const res = document.getElementById("quizResult");
+      if (chosen === q.correct) {
+        res.innerHTML = '<span style="color:#2ea043;"><i class="fa-solid fa-circle-check"></i> دەستخۆش، وەڵامەکەت ڕاستە!</span>';
+      } else {
+        res.innerHTML = '<span style="color:#e63946;"><i class="fa-solid fa-circle-xmark"></i> وەڵامەکەت هەڵەیە! وەڵامی ڕاست: ' + q.options[q.correct] + '</span>';
+      }
+
+      setTimeout(() => {
+        currentQuizIndex = (currentQuizIndex + 1) % quizData.length;
+        renderQuiz();
+      }, 2500);
     }
 
     function openAddModal() {
@@ -798,6 +1006,7 @@
 
     loadHistory();
     checkAuth();
+    renderQuiz();
   </script>
 </body>
 </html>
