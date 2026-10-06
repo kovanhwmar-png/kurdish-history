@@ -1,9 +1,18 @@
 <!DOCTYPE html>
-<html lang="ku" dir="rtl">
+<html lang="ku" dir="rtl" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>مێژووی گەلی کورد</title>
+  <title>مێژووی گەلی کورد | کوردستان</title>
+  
+  <!-- SEO & Social Media Preview (OpenGraph) -->
+  <meta name="description" content="گەنجینەیەکی دەوڵەمەندی شارستانیەت و مێژووی کوردستان؛ لە سەردەمە دێرینەکان، سۆمەر و مادەوە تا میرنشینەکان و مێژووی هاوچەرخ.">
+  <meta property="og:title" content="مێژووی گەلی کورد | کوردستان">
+  <meta property="og:description" content="گەنجینەیەکی مێژوویی سەرچاوەدار دەربارەی سەردەم، شارستانییەت و میرنشینە سەربەخۆکانی کوردستان.">
+  <meta property="og:image" content="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?w=1200">
+  <meta property="og:url" content="https://kurdishhistory.netlify.app">
+  <meta property="og:type" content="website">
+
   <!-- فۆنت و ئایکۆنەکان -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet">
@@ -21,13 +30,25 @@
       --text-white: #ffffff;
       --danger: #e63946;
       --edit: #2ea043;
+      --header-bg: rgba(22, 27, 34, 0.95);
+    }
+
+    [data-theme="light"] {
+      --bg: #f6f8fa;
+      --card-bg: #ffffff;
+      --border: #d0d7de;
+      --accent: #9a7209;
+      --accent-hover: #7d5c05;
+      --text: #24292f;
+      --text-white: #0f1419;
+      --header-bg: rgba(255, 255, 255, 0.95);
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
-    body { background-color: var(--bg); color: var(--text); line-height: 1.8; padding-bottom: 60px; overflow-x: hidden; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.8; padding-bottom: 60px; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
 
     header {
-      background: rgba(22, 27, 34, 0.95);
+      background: var(--header-bg);
       border-bottom: 1px solid var(--border);
       padding: 16px 25px;
       position: sticky;
@@ -41,7 +62,24 @@
 
     .brand { font-size: 1.3rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
     
-    .nav-left-actions { display: flex; align-items: center; gap: 15px; }
+    .nav-left-actions { display: flex; align-items: center; gap: 12px; }
+
+    /* دوگمەی گۆڕینی دۆخی ڕووناک/تاریک */
+    .theme-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--accent);
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      transition: 0.2s;
+    }
+    .theme-btn:hover { background: var(--card-bg); border-color: var(--accent); }
 
     .menu-toggle {
       background: none;
@@ -55,7 +93,7 @@
       padding: 4px;
       transition: 0.2s;
     }
-    .menu-toggle:hover { color: #fff; transform: scale(1.08); }
+    .menu-toggle:hover { color: var(--accent-hover); transform: scale(1.08); }
 
     .side-drawer {
       position: fixed;
@@ -94,7 +132,7 @@
     }
     .drawer-header h3 { color: var(--accent); font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
     .close-drawer { background: none; border: none; color: #8b949e; font-size: 1.4rem; cursor: pointer; }
-    .close-drawer:hover { color: #fff; }
+    .close-drawer:hover { color: var(--accent); }
 
     .btn-google {
       display: flex;
@@ -116,14 +154,14 @@
     .btn-google:hover { background: #f2f2f2; transform: translateY(-2px); }
 
     .user-box {
-      background: #0d1117;
+      background: var(--bg);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 15px;
       text-align: center;
       margin-top: 10px;
     }
-    .user-box p { font-size: 0.95rem; color: #fff; margin-bottom: 12px; word-break: break-all; }
+    .user-box p { font-size: 0.95rem; color: var(--text-white); margin-bottom: 12px; word-break: break-all; }
     .btn-logout {
       width: 100%;
       background: rgba(230, 57, 70, 0.15);
@@ -148,12 +186,12 @@
 
     .hero { text-align: center; padding: 45px 20px 25px; max-width: 800px; margin: auto; }
     .hero h1 { font-size: 2.1rem; color: var(--text-white); margin-bottom: 12px; font-weight: 900; }
-    .hero p { font-size: 1.05rem; color: #8b949e; }
+    .hero p { font-size: 1.05rem; color: var(--text); opacity: 0.85; }
 
     .search-box { max-width: 500px; margin: 25px auto 15px; position: relative; }
     .search-box input {
       width: 100%; padding: 12px 45px 12px 20px; background: var(--card-bg);
-      border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 1rem; outline: none;
+      border: 1px solid var(--border); border-radius: 12px; color: var(--text-white); font-size: 1rem; outline: none;
     }
     .search-box input:focus { border-color: var(--accent); }
     .search-box i { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--accent); }
@@ -193,7 +231,7 @@
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
     .card {
       background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
-      overflow: hidden; position: relative; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      overflow: hidden; position: relative; transition: 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
       cursor: pointer; display: flex; flex-direction: column; justify-content: space-between;
     }
     .card:hover { transform: translateY(-4px); border-color: var(--accent); }
@@ -202,19 +240,29 @@
       width: 100%;
       height: 170px;
       object-fit: cover;
-      background: #0d1117;
+      background: var(--bg);
       display: block;
     }
     .card-content-wrap { padding: 18px; display: flex; flex-direction: column; flex-grow: 1; }
     
+    .card-top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
     .card-era {
       display: inline-block; font-size: 0.8rem; font-weight: 700; color: var(--accent);
-      background: rgba(212, 175, 55, 0.1); padding: 4px 10px; border-radius: 6px; margin-bottom: 10px;
-      align-self: flex-start;
+      background: rgba(212, 175, 55, 0.12); padding: 4px 10px; border-radius: 6px;
     }
+    .btn-fav {
+      background: none; border: none; font-size: 1.15rem; cursor: pointer; color: #8b949e; transition: 0.2s;
+    }
+    .btn-fav.active { color: #e63946; }
+
     .card h3 { font-size: 1.25rem; color: var(--text-white); margin-bottom: 10px; }
     .card-snippet {
-      font-size: 0.95rem; color: #8b949e; margin-bottom: 15px;
+      font-size: 0.95rem; color: var(--text); opacity: 0.9; margin-bottom: 15px;
       display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
     }
     .read-more-text { color: var(--accent); font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 5px; margin-top: auto; }
@@ -242,9 +290,20 @@
       display: none; border: 1px solid var(--border);
     }
     .modal-content h2 { color: var(--accent); margin-bottom: 8px; font-size: 1.4rem; }
-    .modal-era { color: #8b949e; font-size: 0.9rem; margin-bottom: 16px; font-weight: 600; }
-    .modal-body { color: #d0d7de; font-size: 1rem; line-height: 1.9; white-space: pre-wrap; margin-bottom: 20px; }
+    .modal-era { color: var(--accent); font-size: 0.9rem; margin-bottom: 16px; font-weight: 600; }
+    .modal-body { color: var(--text); font-size: 1rem; line-height: 1.9; white-space: pre-wrap; margin-bottom: 16px; }
     
+    .modal-source {
+      background: rgba(212, 175, 55, 0.08);
+      border-right: 3px solid var(--accent);
+      padding: 10px 14px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      color: var(--text-white);
+      margin-bottom: 20px;
+    }
+    .modal-source i { color: var(--accent); margin-left: 6px; }
+
     .modal-footer-actions {
       display: flex; gap: 10px; border-top: 1px solid var(--border); padding-top: 15px;
     }
@@ -256,14 +315,13 @@
     .btn-share:hover { background: var(--accent); color: #000; }
 
     .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: #8b949e; }
+    .form-group label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: var(--text); }
     .form-group input, .form-group textarea {
-      width: 100%; padding: 12px; background: #0d1117; border: 1px solid var(--border); border-radius: 8px; color: #fff;
+      width: 100%; padding: 12px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text-white);
     }
     .close-modal { position: absolute; top: 20px; left: 20px; background: none; border: none; color: #8b949e; font-size: 1.3rem; cursor: pointer; }
     .loading-msg { text-align: center; color: var(--accent); font-size: 1.1rem; padding: 30px; grid-column: 1 / -1; }
 
-    /* دوگمەی سەرەوە */
     .back-to-top {
       position: fixed;
       bottom: 25px;
@@ -288,10 +346,8 @@
 </head>
 <body>
 
-  <!-- پەردەی ڕەشی مێنیو -->
   <div class="drawer-overlay" id="drawerOverlay" onclick="toggleMenu()"></div>
 
-  <!-- مێنیوی دەستە چەپ -->
   <div class="side-drawer" id="sideDrawer">
     <div class="drawer-header">
       <h3><i class="fa-solid fa-bars"></i> بەشەکان</h3>
@@ -299,7 +355,7 @@
     </div>
 
     <div id="loggedOutSection">
-      <p style="color: #8b949e; font-size: 0.9rem; margin-bottom: 14px;">چوونەژوورەوە لە ڕێگەی هەژمار:</p>
+      <p style="color: var(--text); font-size: 0.9rem; margin-bottom: 14px;">چوونەژوورەوە لە ڕێگەی هەژمار:</p>
       <button class="btn-google" onclick="loginWithGoogle()">
         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
         <span>چوونەژوورەوە بە گووگڵ</span>
@@ -321,6 +377,9 @@
     <div class="brand"><i class="fa-solid fa-feather-pointed"></i> مێژووی گەلی کورد</div>
     
     <div class="nav-left-actions">
+      <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="گۆڕینی دۆخی ڕەنگ">
+        <i class="fa-solid fa-sun"></i>
+      </button>
       <div class="admin-controls">
         <button class="btn btn-add" id="addBtn" onclick="openAddModal()">
           <i class="fa-solid fa-plus"></i> زیادکردنی بابەت
@@ -341,13 +400,13 @@
       <input type="text" id="searchInput" placeholder="گەڕان بەناو میرنشین، ساڵ و مێژووەکان..." onkeyup="filterCards()">
     </div>
 
-    <!-- دوگمەکانی فلتەر -->
     <div class="filter-container">
       <button class="filter-btn active" onclick="setFilter('all', this)">هەمووی</button>
       <button class="filter-btn" onclick="setFilter('دێرین', this)">سەردەمی دێرین (پ.ز)</button>
       <button class="filter-btn" onclick="setFilter('ئیسلامی', this)">سەردەمی ئیسلامی</button>
       <button class="filter-btn" onclick="setFilter('میرنشین', this)">میرنشینەکان</button>
       <button class="filter-btn" onclick="setFilter('هاوچەرخ', this)">مێژووی هاوچەرخ</button>
+      <button class="filter-btn" onclick="setFilter('favs', this)"><i class="fa-solid fa-heart" style="color:#e63946;"></i> دڵخوازەکانم</button>
     </div>
   </section>
 
@@ -361,7 +420,7 @@
     </div>
   </div>
 
-  <!-- مۆدالی پیشاندانی تەواوی دەق -->
+  <!-- مۆدالی بینینی بابەت -->
   <div class="modal" id="viewModal">
     <div class="modal-content">
       <button class="close-modal" onclick="closeViewModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -369,6 +428,11 @@
       <h2 id="viewTitle"></h2>
       <div class="modal-era" id="viewEra"></div>
       <div class="modal-body" id="viewContent"></div>
+      <div class="modal-source" id="viewSourceWrap" style="display: none;">
+        <i class="fa-solid fa-book-bookmark"></i>
+        <span>سەرچاوە: </span>
+        <strong id="viewSource"></strong>
+      </div>
       <div class="modal-footer-actions">
         <button class="btn-share" onclick="shareCurrentArticle()">
           <i class="fa-solid fa-share-nodes"></i> هاوبەشکردنی بابەت
@@ -377,7 +441,7 @@
     </div>
   </div>
 
-  <!-- مۆدالی فۆڕمی زیادکردن و دەستکاریکردن -->
+  <!-- مۆدالی فۆڕمی زیادکردن/دەستکاریکردن -->
   <div class="modal" id="editModal">
     <div class="modal-content">
       <button class="close-modal" onclick="closeEditModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -393,6 +457,10 @@
         <input type="text" id="inputEra" required>
       </div>
       <div class="form-group">
+        <label>سەرچاوە / کتێب (بۆ نموونە: شەرەفنامە - شەرەفخانی بەدلیسی):</label>
+        <input type="text" id="inputSource" placeholder="ناوی کتێب، نوسەر یان بەڵگەنامە...">
+      </div>
+      <div class="form-group">
         <label>بەستەری وێنە (Image URL - ئیختیارییە):</label>
         <input type="url" id="inputImage" placeholder="https://example.com/image.jpg">
       </div>
@@ -404,7 +472,6 @@
     </div>
   </div>
 
-  <!-- دوگمەی گەڕانەوە بۆ سەرەوە -->
   <button class="back-to-top" id="backToTopBtn" onclick="scrollToTop()" title="سەرەوە">
     <i class="fa-solid fa-chevron-up"></i>
   </button>
@@ -417,9 +484,34 @@
     const ADMIN_EMAIL = "kovanhwmar@gmail.com";
 
     let historyItems = [];
+    let favorites = JSON.parse(localStorage.getItem('kurdish_history_favs')) || [];
     let isAdmin = false;
     let currentFilter = 'all';
     let currentViewingItem = null;
+
+    // کردارەکانی مۆدی تاریک و ڕووناک
+    function toggleTheme() {
+      const html = document.documentElement;
+      const currentTheme = html.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', newTheme);
+      localStorage.setItem('kurdish_theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+      const icon = document.querySelector('#themeBtn i');
+      if (theme === 'light') {
+        icon.className = 'fa-solid fa-moon';
+      } else {
+        icon.className = 'fa-solid fa-sun';
+      }
+    }
+
+    // پشکنینی ڕەنگی پێشوو
+    const savedTheme = localStorage.getItem('kurdish_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
 
     function toggleMenu() {
       document.getElementById("sideDrawer").classList.toggle("active");
@@ -480,6 +572,17 @@
       }
     }
 
+    function toggleFavorite(id, e) {
+      e.stopPropagation();
+      if (favorites.includes(id)) {
+        favorites = favorites.filter(favId => favId !== id);
+      } else {
+        favorites.push(id);
+      }
+      localStorage.setItem('kurdish_history_favs', JSON.stringify(favorites));
+      filterCards();
+    }
+
     function renderCards(items) {
       const grid = document.getElementById("historyGrid");
       grid.innerHTML = "";
@@ -493,12 +596,16 @@
         const card = document.createElement("div");
         card.className = "card";
         card.onclick = (e) => {
-          if (!e.target.closest('.card-actions')) openViewModal(item);
+          if (!e.target.closest('.card-actions') && !e.target.closest('.btn-fav')) {
+            openViewModal(item);
+          }
         };
 
         const imageHtml = item.image 
           ? `<img src="${item.image}" alt="${item.title}" class="card-thumb" onerror="this.style.display='none'">` 
           : '';
+
+        const isFav = favorites.includes(item.id);
 
         card.innerHTML = `
           ${imageHtml}
@@ -511,7 +618,12 @@
             </button>
           </div>
           <div class="card-content-wrap">
-            <span class="card-era">${item.era}</span>
+            <div class="card-top-meta">
+              <span class="card-era">${item.era}</span>
+              <button class="btn-fav ${isFav ? 'active' : ''}" onclick="toggleFavorite(${item.id}, event)" title="${isFav ? 'لابردن لە دڵخوازەکان' : 'زیادکردن بۆ دڵخوازەکان'}">
+                <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
+              </button>
+            </div>
             <h3>${item.title}</h3>
             <p class="card-snippet">${item.content}</p>
             <div class="read-more-text">
@@ -539,6 +651,8 @@
                             item.era.toLowerCase().includes(val);
 
         if (currentFilter === 'all') return matchSearch;
+        if (currentFilter === 'favs') return matchSearch && favorites.includes(item.id);
+
         const matchFilter = (item.era && item.era.toLowerCase().includes(currentFilter)) || 
                             (item.title && item.title.toLowerCase().includes(currentFilter)) ||
                             (item.content && item.content.toLowerCase().includes(currentFilter));
@@ -559,6 +673,14 @@
         modalImg.style.display = "block";
       } else {
         modalImg.style.display = "none";
+      }
+
+      const sourceWrap = document.getElementById("viewSourceWrap");
+      if (item.source) {
+        document.getElementById("viewSource").innerText = item.source;
+        sourceWrap.style.display = "block";
+      } else {
+        sourceWrap.style.display = "none";
       }
 
       document.getElementById("viewModal").style.display = "flex";
@@ -590,6 +712,7 @@
       document.getElementById("editItemId").value = "";
       document.getElementById("inputTitle").value = "";
       document.getElementById("inputEra").value = "";
+      document.getElementById("inputSource").value = "";
       document.getElementById("inputImage").value = "";
       document.getElementById("inputContent").value = "";
       document.getElementById("editModal").style.display = "flex";
@@ -602,6 +725,7 @@
       document.getElementById("editItemId").value = item.id;
       document.getElementById("inputTitle").value = item.title;
       document.getElementById("inputEra").value = item.era;
+      document.getElementById("inputSource").value = item.source || "";
       document.getElementById("inputImage").value = item.image || "";
       document.getElementById("inputContent").value = item.content;
       document.getElementById("editModal").style.display = "flex";
@@ -615,6 +739,7 @@
       const id = document.getElementById("editItemId").value;
       const title = document.getElementById("inputTitle").value.trim();
       const era = document.getElementById("inputEra").value.trim();
+      const source = document.getElementById("inputSource").value.trim();
       const image = document.getElementById("inputImage").value.trim();
       const content = document.getElementById("inputContent").value.trim();
 
@@ -628,7 +753,7 @@
       saveBtn.disabled = true;
 
       try {
-        const payload = { title, era, content, image };
+        const payload = { title, era, content, image, source };
         if (id) {
           const { error } = await client.from('kurdish_history').update(payload).eq('id', id);
           if (error) throw error;
@@ -658,7 +783,6 @@
       }
     }
 
-    // دوگمەی سەرەوە
     window.onscroll = function() {
       const topBtn = document.getElementById("backToTopBtn");
       if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
