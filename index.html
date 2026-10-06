@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ku" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مێژووی گەلی کورد</title>
+  <!-- فۆنتی فەرمی و ئایکۆنەکان -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --accent: #d4af37; /* ئاڵتوونی */
+      --accent-hover: #b89628;
+      --text: #c9d1d9;
+      --text-white: #ffffff;
+      --danger: #e63946;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Vazirmatn', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.8;
+      padding-bottom: 60px;
+    }
+
+    /* سەرپەڕە / Header */
+    header {
+      background: linear-gradient(180deg, rgba(22, 27, 34, 0.95), rgba(13, 17, 23, 0.95));
+      border-bottom: 1px solid var(--border);
+      padding: 20px 25px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(8px);
+    }
+
+    .brand {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-btn {
+      background: transparent;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .admin-btn:hover {
+      background: var(--accent);
+      color: #000;
+    }
+
+    /* بەشی Hero */
+    .hero {
+      text-align: center;
+      padding: 60px 20px 40px;
+      max-width: 800px;
+      margin: auto;
+    }
+
+    .hero h1 {
+      font-size: 2.3rem;
+      color: var(--text-white);
+      margin-bottom: 15px;
+      font-weight: 900;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      color: #8b949e;
+    }
+
+    /* بۆکسی گەڕان */
+    .search-box {
+      max-width: 500px;
+      margin: 30px auto;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 14px 45px 14px 20px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+    }
+
+    .search-box i {
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--accent);
+      font-size: 1.1rem;
+    }
+
+    /* تۆڕی کارتەکان */
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    .section-title {
+      color: var(--accent);
+      font-size: 1.4rem;
+      margin: 40px 0 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 2px solid var(--border);
+      padding-bottom: 10px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px;
+      position: relative;
+      transition: transform 0.2s, border-color 0.2s;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      border-color: var(--accent);
+    }
+
+    .card-era {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--accent);
+      background: rgba(212, 175, 55, 0.1);
+      padding: 3px 10px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .card h3 {
+      font-size: 1.25rem;
+      color: var(--text-white);
+      margin-bottom: 10px;
+    }
+
+    .card p {
+      font-size: 0.95rem;
+      color: #8b949e;
+      margin-bottom: 15px;
+    }
+
+    .delete-item-btn {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      background: rgba(230, 57, 70, 0.15);
+      color: var(--danger);
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    /* مۆدال و فۆڕمی زیادکردن */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(5px);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 30px;
+      max-width: 500px;
+      width: 100%;
+      position: relative;
+    }
+
+    .modal-content h2 {
+      color: var(--accent);
+      margin-bottom: 20px;
+      font-size: 1.3rem;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+      color: #8b949e;
+    }
+
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%;
+      padding: 12px;
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .form-group input:focus, .form-group textarea:focus {
+      border-color: var(--accent);
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--accent);
+      color: #000;
+      padding: 12px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-top: 10px;
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: none;
+      border: none;
+      color: #8b949e;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- هیدەر -->
+  <header>
+    <div class="brand">
+      <i class="fa-solid fa-feather-pointed"></i>
+      مێژووی گەلی کورد
+    </div>
+    <button class="admin-btn" id="toggleAdminBtn" onclick="toggleAdminMode()">
+      <i class="fa-solid fa-lock"></i> دۆخی بەڕێوەبەر
+    </button>
+  </header>
+
+  <!-- بەشی پێشەکی -->
+  <section class="hero">
+    <h1>شارستانییەت و مێژووی کوردستان</h1>
+    <p>گەنجینەیەکی مێژوویی دەوڵەمەند لە دێرینترین سەردەمەکان، ئیمپراتۆریەتەکان و میرنشینە سەربەخۆکانەوە تاوەکو مێژووی هاوچەرخ.</p>
+    
+    <div class="search-box">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input type="text" id="searchInput" placeholder="گەڕان بەناو میرنشین، ساڵ و مێژووەکان..." onkeyup="filterCards()">
+    </div>
+  </section>
+
+  <!-- ناوەڕۆک -->
+  <div class="container">
+    <div class="section-title">
+      <i class="fa-solid fa-landmark"></i>
+      <span>تەواوی میرنشین و سەردەمە مێژووییەکان</span>
+    </div>
+
+    <div class="grid" id="historyGrid">
+      <!-- کارتەکان لە ڕێگەی جاڤاسکریپتەوە دروست دەبن -->
+    </div>
+  </div>
+
+  <!-- مۆدالی بەڕێوەبەر بۆ زیادکردنی بابەتی نوێ -->
+  <div class="modal" id="adminModal">
+    <div class="modal-content">
+      <button class="close-modal" onclick="closeModal()"><i class="fa-solid fa-xmark"></i></button>
+      <h2><i class="fa-solid fa-plus-circle"></i> زیادکردنی قۆناغ یان میرنشین</h2>
+      
+      <div class="form-group">
+        <label>ناونیشان (بۆ نموونە: میرنشینی بابان):</label>
+        <input type="text" id="newTitle" required>
+      </div>
+
+      <div class="form-group">
+        <label>سەردەم / مێژوو (بۆ نموونە: ١٦٤٩ – ١٨٥١ ز):</label>
+        <input type="text" id="newEra" required>
+      </div>
+
+      <div class="form-group">
+        <label>کورتەی مێژوویی و زانیاری:</label>
+        <textarea id="newDesc" rows="4" required></textarea>
+      </div>
+
+      <button class="btn-submit" onclick="addNewHistoryItem()">زیادکردنی بابەت</button>
+    </div>
+  </div>
+
+  <script>
+    // لیستی سەرەتایی
+    const defaultData = [
+      { id: 1, title: "ئیمپراتۆریەتیی ماد", era: "٦٧٨ – ٥٤٩ پ.ز", desc: "یەکێک لە مەزنترین دەوڵەتە دێرینەکانی ناوچەکە بە پایتەختیی ئەکباتانا (هەمەدان) کە یەکێتییەکی بەهێزی خێڵە ئاری و مادەکان بوو." },
+      { id: 2, title: "دەوڵەتی ئەییووبی", era: "١١٧١ – ١٢٦٠ ز", desc: "بە دامەزرێنەری سەڵاحەدینی ئەییووبی کە کۆنترۆڵی میسر، شام، حیجاز و بەشێکی زۆری ناوچەکەی کرد و قودسی ڕزگار کرد." },
+      { id: 3, title: "میرنشینی بابان", era: "١٦٤٩ – ١٨٥١ ز", desc: "میرنشینێکی دەسەڵاتدار بوو بە پایتەختیی قەڵاچوالان و دواتر شاری سلێمانی؛ ڕۆڵێکی گەورەی لە ئەدەب و ڕۆشنبیریی کوردیدا گێڕا." },
+      { id: 4, title: "میرنشینی سۆران", era: "١٨١٣ – ١٨٣٨ ز (سەردەمی زێڕین)", desc: "بە سەرکردایەتیی میر محەممەد (پاشای گەورە) لە ڕەواندز کە کارگەی تۆپ و چەکی دروستکرد و دراوی تایبەت بەخۆی لێدا." },
+      { id: 5, title: "میرنشینی بۆتان", era: "سەدەی ١٤ – ١٨٥٥ ز", desc: "بە پایتەختیی جەزیرەی بۆتان؛ لە سەردەمی میر بەدرخان پاشا دەسەڵاتی فراوان بوو و شۆڕشێکی گەورەی بەرپا کرد." },
+      { id: 6, title: "کۆماری کوردستان (مەهاباد)", era: "١٩٤٦ ز", desc: "یەکەم کۆماری کوردی لە سەردەمی هاوچەرخدا بە سەرۆکایەتی پێشەوا قازی محەممەد لە مەهاباد ڕاگەیەندرا." }
+    ];
+
+    let historyItems = JSON.parse(localStorage.getItem("kurdish_history_items")) || defaultData;
+    let isAdmin = false;
+
+    function renderCards(items) {
+      const grid = document.getElementById("historyGrid");
+      grid.innerHTML = "";
+
+      items.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <button class="delete-item-btn" style="display: ${isAdmin ? 'block' : 'none'};" onclick="deleteItem(${item.id})">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+          <span class="card-era">${item.era}</span>
+          <h3>${item.title}</h3>
+          <p>${item.desc}</p>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCards() {
+      const val = document.getElementById("searchInput").value.toLowerCase();
+      const filtered = historyItems.filter(item => 
+        item.title.toLowerCase().includes(val) || 
+        item.desc.toLowerCase().includes(val) ||
+        item.era.toLowerCase().includes(val)
+      );
+      renderCards(filtered);
+    }
+
+    function toggleAdminMode() {
+      if (!isAdmin) {
+        const pass = prompt("تکایە وشەی نهێنی بەڕێوەبەر داخڵ بکە (وشەی نهێنی بنەڕەتی: 1234):");
+        if (pass === "1234") {
+          isAdmin = true;
+          alert("دۆخی بەڕێوەبەر چالاک کرا! ئێستا دەتوانیت بابەتی نوێ زیاد بکەیت یان بیسڕیتەوە.");
+          document.getElementById("toggleAdminBtn").innerHTML = '<i class="fa-solid fa-plus"></i> زیادکردنی بابەت';
+          document.getElementById("toggleAdminBtn").onclick = openModal;
+          renderCards(historyItems);
+        } else if (pass !== null) {
+          alert("وشەی نهێنی هەڵەیە!");
+        }
+      }
+    }
+
+    function openModal() {
+      document.getElementById("adminModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("adminModal").style.display = "none";
+    }
+
+    function addNewHistoryItem() {
+      const title = document.getElementById("newTitle").value.trim();
+      const era = document.getElementById("newEra").value.trim();
+      const desc = document.getElementById("newDesc").value.trim();
+
+      if (!title || !era || !desc) {
+        alert("تکایە هەموو بۆکسەکان پڕبکەرەوە.");
+        return;
+      }
+
+      const newItem = {
+        id: Date.now(),
+        title,
+        era,
+        desc
+      };
+
+      historyItems.unshift(newItem);
+      localStorage.setItem("kurdish_history_items", JSON.stringify(historyItems));
+      
+      document.getElementById("newTitle").value = "";
+      document.getElementById("newEra").value = "";
+      document.getElementById("newDesc").value = "";
+      
+      closeModal();
+      renderCards(historyItems);
+    }
+
+    function deleteItem(id) {
+      if (confirm("دڵنیایت لە سڕینەوەی ئەم بابەتە؟")) {
+        historyItems = historyItems.filter(i => i.id !== id);
+        localStorage.setItem("kurdish_history_items", JSON.stringify(historyItems));
+        renderCards(historyItems);
+      }
+    }
+
+    // دەستپێکردنی یەکەم جار
+    renderCards(historyItems);
+  </script>
+</body>
+</html>
