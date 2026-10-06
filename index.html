@@ -7,6 +7,8 @@
   <!-- فۆنت و ئایکۆنەکان -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <style>
     :root {
@@ -66,7 +68,7 @@
       display: flex; align-items: center; gap: 10px; border-bottom: 2px solid var(--border); padding-bottom: 10px;
     }
 
-    /* تۆڕی کارتەکان */
+    /* کارتەکان */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
     .card {
       background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
@@ -87,7 +89,6 @@
     }
     .read-more-text { color: var(--accent); font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 5px; }
 
-    /* دوگمەکانی دەستکاری و سڕینەوە لە سەر کارت */
     .card-actions {
       position: absolute; top: 15px; left: 15px; display: none; gap: 8px; z-index: 5;
     }
@@ -97,7 +98,7 @@
     .btn-delete { background: rgba(230, 57, 70, 0.2); color: var(--danger); }
     .btn-edit { background: rgba(46, 160, 67, 0.2); color: var(--edit); }
 
-    /* مۆدالەکان (پەڕەی خوێندنەوە و فۆڕم) */
+    /* مۆدالەکان */
     .modal {
       display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.75); backdrop-filter: blur(5px); justify-content: center; align-items: center; z-index: 1000; padding: 20px;
@@ -116,6 +117,7 @@
       width: 100%; padding: 12px; background: #0d1117; border: 1px solid var(--border); border-radius: 8px; color: #fff;
     }
     .close-modal { position: absolute; top: 20px; left: 20px; background: none; border: none; color: #8b949e; font-size: 1.3rem; cursor: pointer; }
+    .loading-msg { text-align: center; color: var(--accent); font-size: 1.1rem; padding: 30px; grid-column: 1 / -1; }
   </style>
 </head>
 <body>
@@ -146,10 +148,12 @@
       <i class="fa-solid fa-landmark"></i>
       <span>تەواوی میرنشین و سەردەمە مێژووییەکان</span>
     </div>
-    <div class="grid" id="historyGrid"></div>
+    <div class="grid" id="historyGrid">
+      <div class="loading-msg"><i class="fa-solid fa-spinner fa-spin"></i> زانیارییەکان لە داتابەیسەوە دادەبەزن...</div>
+    </div>
   </div>
 
-  <!-- مۆدالی خوێندنەوەی تەواوی بابەت -->
+  <!-- مۆدالی پیشاندانی تەواوی دەق -->
   <div class="modal" id="viewModal">
     <div class="modal-content">
       <button class="close-modal" onclick="closeViewModal()"><i class="fa-solid fa-xmark"></i></button>
@@ -176,69 +180,92 @@
       </div>
       <div class="form-group">
         <label>تەواوی نووسین و زانیارییەکان:</label>
-        <textarea id="inputContent" rows="10" placeholder="تەواوی دەقی بابەتەکە لێرە بنووسە..." required></textarea>
+        <textarea id="inputContent" rows="10" placeholder="دەقی تەواوی بابەتەکە لێرە بنووسە..." required></textarea>
       </div>
-      <button class="btn" style="width:100%; background:var(--accent); color:#000;" onclick="saveItem()">پاشەکەوتکردن</button>
+      <button class="btn" id="saveBtn" style="width:100%; background:var(--accent); color:#000;" onclick="saveItem()">پاشەکەوتکردن</button>
     </div>
   </div>
 
   <script>
-    const defaultData = [
-      {
-        id: 1,
-        title: "ئیمپراتۆریەتیی ماد",
-        era: "٦٧٨ – ٥٤٩ پ.ز",
-        content: "ئیمپراتۆریەتیی ماد یەکێک لە مەزنترین دەوڵەتە دێرینەکانی ناوچەکە بووە بە پایتەختیی ئەکباتانا (هەمەدانی ئێستا).\nمادەکان یەکێتییەکی بەهێزی خێڵە ئارییەکانیان پێک هێنا و لەگەڵ بابلییەکان توانییان کۆتایی بە ئیمپراتۆریەتیی خوێنڕێژی ئاشووری بهێنن لە ساڵی ٦١٢ پ.ز بە گرتنی نەینەوا."
-      },
-      {
-        id: 2,
-        title: "دەوڵەتی ئەییووبی",
-        era: "١١٧١ – ١٢٦٠ ز",
-        content: "بە دامەزرێنەری سەڵاحەدینی ئەییووبی کە کۆنترۆڵی میسر، شام، حیجاز و بەشێکی زۆری ناوچەکەی کرد.\nئەییووبییەکان ڕۆڵێکی بێ وێنەیان لە مێژووی ناوچەکەدا گێڕا لە ڕووبەڕووبوونەوەی خاچپەرستان و ڕزگارکردنی قودس لە ساڵی ١١٨٧ ز."
-      },
-      {
-        id: 3,
-        title: "میرنشینی بابان",
-        era: "١٦٤٩ – ١٨٥١ ز",
-        content: "میرنشینێکی دەسەڵاتداری کوردی بوو بە پایتەختیی سەرەتایی قەڵاچوالان و دواتر لە ساڵی ١٧٨٤ لەلایەن ئیبراهیم پاشای بابانەوە شاری سلێمانی دروست کرا و کرایە پایتەخت.\nلەم سەردەمەدا ئەدەب و شیعری کوردی گەیشتە قۆناغی زێڕین بە دەرکەوتنی شاعیرانی وەک نالی، سالم و کوردی."
-      },
-      {
-        id: 4,
-        title: "میرنشینی سۆران",
-        era: "١٨١٣ – ١٨٣٨ ز",
-        content: "لە سەردەمی میر محەممەد (پاشای گەورە) لە ڕەواندز گەیشتە لوتکەی بەهێزی.\nمیر کارگەی تۆپ و چەکی دروستکرد بە دەستی وەستا ڕەجەب و دراوی تایبەت بەخۆی لێدا و دەسەڵاتی بەسەر زۆربەی ناوچەکانی کوردستاندا سەپاند."
-      },
-      {
-        id: 5,
-        title: "میرنشینی بۆتان",
-        era: "سەدەی ١٤ – ١٨٥٥ ز",
-        content: "بە پایتەختیی جەزیرەی بۆتان؛ لە سەردەمی میر بەدرخان پاشا دەسەڵاتی زۆر فراوان بوو و توانی سوپایەکی تۆکمە و یەکێتییەکی گەورە لە ناوچەکەدا دروست بکات."
-      }
-    ];
+    // ڕێکخستنی Supabase بە بەستەر و کلیلی ڕاستەقینە
+    const SUPABASE_URL = "https://dptgvascyofbbnjcqfly.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_5C1ul9IuxiFRGByPb6VQjg_P5yXfhMW";
+    const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    let historyItems = JSON.parse(localStorage.getItem("kurdish_history_items")) || defaultData;
+    let historyItems = [];
     let isAdmin = false;
+
+    // دابەزاندنی داتاکان لە داتابەیسی سەرهێڵەوە
+    async function loadHistory() {
+      try {
+        const { data, error } = await client
+          .from('kurdish_history')
+          .select('*')
+          .order('id', { ascending: false });
+
+        if (error) throw error;
+
+        // ئەگەر داتابەیسەکە تازە بێت و بەتاڵ بێت، چەند زانیارییەکی سەرەتایی تێدەکات
+        if (!data || data.length === 0) {
+          await insertInitialData();
+          return;
+        }
+
+        historyItems = data;
+        renderCards(historyItems);
+      } catch (err) {
+        console.error("هەڵە لە هێنانی داتا:", err);
+        document.getElementById("historyGrid").innerHTML = '<div class="loading-msg" style="color:var(--danger)">هەڵەیەک ڕوویدا لە بارکردنی داتابەیس!</div>';
+      }
+    }
+
+    async function insertInitialData() {
+      const initial = [
+        {
+          title: "شارستانیەتی سۆمەرییەکان",
+          era: "٣٥٠٠ – ٢٠٠٠ پ.ز",
+          content: "سۆمەرییەکان بە خۆیان نەگوتووە سۆمەری، بەڵکو خاکەکەیان بە «کی ئین گی» ناوبردووە.\nبەپێی بەڵگە شوێنەوارییەکان، بنەچەی شارستانیەت لە ناوچە شاخاوییەکانی کوردستان و زاگرۆسەوە سەرچاوەی گرتووە (چەرمۆ نزیکەی ٩٠٠٠ ساڵ پێش ئێستا لە چەمچەماڵ، شانیدەر و گرێ ناڤۆکێ)، پاشان دابەزیونەتە خوارووی میزۆپۆتامیا.\nزمانی سۆمەری لە زۆر ڕووەوە لێکچوونی تەواوی لەگەڵ کوردیدا هەیە:\n• nu-zu: نەزان\n• nu-dug-ga: نادوێت / بێدەنگ\n• gal: گەورە و کەڵ\n• dingir zi mu: خوای ژیانم (دینگەر ژی مە)"
+        },
+        {
+          title: "ئیمپراتۆریەتیی ماد",
+          era: "٦٧٨ – ٥٤٩ پ.ز",
+          content: "مادەکان یەکەمین یەکێتیی مەزنی ناوچەکەیان پێکهێنا بە پایتەختیی ئەکباتانا (هەمەدان) و لە ساڵی ٦١٢ پ.ز کۆتاییان بە ئیمپراتۆریەتیی ئاشووری هێنا."
+        },
+        {
+          title: "دەوڵەتی ئەییووبی",
+          era: "١١٧١ – ١٢٦٠ ز",
+          content: "بە ڕابەرایەتی سوڵتان سەڵاحەدینی ئەییووبی کە کۆنترۆڵی میسر، شام، حیجاز و کوردستان کرد و قودسی ڕزگار کرد."
+        }
+      ];
+
+      await client.from('kurdish_history').insert(initial);
+      loadHistory();
+    }
 
     function renderCards(items) {
       const grid = document.getElementById("historyGrid");
       grid.innerHTML = "";
 
+      if (items.length === 0) {
+        grid.innerHTML = '<div class="loading-msg">هیچ بابەتێک نەدۆزرایەوە.</div>';
+        return;
+      }
+
       items.forEach(item => {
         const card = document.createElement("div");
         card.className = "card";
         card.onclick = (e) => {
-          // ئەگەر دەست لە دوگمەی سڕینەوە یان دەستکاری نەدرابێت مۆدال بکەرەوە
           if (!e.target.closest('.card-actions')) {
-            openViewModal(item.id);
+            openViewModal(item);
           }
         };
 
         card.innerHTML = `
           <div class="card-actions" style="display: ${isAdmin ? 'flex' : 'none'};">
-            <button class="action-btn btn-edit" title="دەستکاریکردن" onclick="openEditModal(${item.id})">
+            <button class="action-btn btn-edit" title="دەستکاریکردن" onclick="event.stopPropagation(); openEditModal(${item.id})">
               <i class="fa-solid fa-pen"></i>
             </button>
-            <button class="action-btn btn-delete" title="سڕینەوە" onclick="deleteItem(${item.id})">
+            <button class="action-btn btn-delete" title="سڕینەوە" onclick="event.stopPropagation(); deleteItem(${item.id})">
               <i class="fa-solid fa-trash"></i>
             </button>
           </div>
@@ -268,7 +295,7 @@
 
     function toggleAdmin() {
       if (!isAdmin) {
-        const pass = prompt("وشەی نهێنی بەڕێوەبەر بنووسە (1234):");
+        const pass = prompt("وشەی نهێنی بەڕێوەبەر بنووسە:");
         if (pass === "1234") {
           isAdmin = true;
           document.getElementById("addBtn").style.display = "inline-flex";
@@ -285,10 +312,7 @@
       }
     }
 
-    // پیشاندانی درێژەی بابەت
-    function openViewModal(id) {
-      const item = historyItems.find(i => i.id === id);
-      if (!item) return;
+    function openViewModal(item) {
       document.getElementById("viewTitle").innerText = item.title;
       document.getElementById("viewEra").innerText = item.era;
       document.getElementById("viewContent").innerText = item.content;
@@ -299,9 +323,8 @@
       document.getElementById("viewModal").style.display = "none";
     }
 
-    // فۆڕمی زیادکردن و دەستکاریکردن
     function openAddModal() {
-      document.getElementById("formTitle").innerText = "زیادکردنی بابەت";
+      document.getElementById("formTitle").innerText = "زیادکردنی بابەت بۆ داتابەیس";
       document.getElementById("editItemId").value = "";
       document.getElementById("inputTitle").value = "";
       document.getElementById("inputEra").value = "";
@@ -324,7 +347,7 @@
       document.getElementById("editModal").style.display = "none";
     }
 
-    function saveItem() {
+    async function saveItem() {
       const id = document.getElementById("editItemId").value;
       const title = document.getElementById("inputTitle").value.trim();
       const era = document.getElementById("inputEra").value.trim();
@@ -335,34 +358,56 @@
         return;
       }
 
-      if (id) {
-        // نوێکردنەوە / Edit
-        const item = historyItems.find(i => i.id == id);
-        if (item) {
-          item.title = title;
-          item.era = era;
-          item.content = content;
+      const saveBtn = document.getElementById("saveBtn");
+      saveBtn.innerText = "چاوەڕێ بە...";
+      saveBtn.disabled = true;
+
+      try {
+        if (id) {
+          // نوێکردنەوە لە Supabase
+          const { error } = await client
+            .from('kurdish_history')
+            .update({ title, era, content })
+            .eq('id', id);
+
+          if (error) throw error;
+        } else {
+          // تۆمارکردنی نوێ لە Supabase
+          const { error } = await client
+            .from('kurdish_history')
+            .insert([{ title, era, content }]);
+
+          if (error) throw error;
         }
-      } else {
-        // زیادکردنی نوێ
-        const newItem = { id: Date.now(), title, era, content };
-        historyItems.unshift(newItem);
-      }
 
-      localStorage.setItem("kurdish_history_items", JSON.stringify(historyItems));
-      closeEditModal();
-      renderCards(historyItems);
-    }
-
-    function deleteItem(id) {
-      if (confirm("دڵنیایت لە سڕینەوەی ئەم بابەتە؟")) {
-        historyItems = historyItems.filter(i => i.id !== id);
-        localStorage.setItem("kurdish_history_items", JSON.stringify(historyItems));
-        renderCards(historyItems);
+        closeEditModal();
+        await loadHistory();
+      } catch (err) {
+        alert("هەڵە ڕوویدا لە تۆمارکردن: " + err.message);
+      } finally {
+        saveBtn.innerText = "پاشەکەوتکردن";
+        saveBtn.disabled = false;
       }
     }
 
-    renderCards(historyItems);
+    async function deleteItem(id) {
+      if (confirm("دڵنیایت لە سڕینەوەی ئەم بابەتە لە تەواوی داتابەیسەکە؟")) {
+        try {
+          const { error } = await client
+            .from('kurdish_history')
+            .delete()
+            .eq('id', id);
+
+          if (error) throw error;
+          await loadHistory();
+        } catch (err) {
+          alert("هەڵە ڕوویدا لە سڕینەوە: " + err.message);
+        }
+      }
+    }
+
+    // دەستپێکردنی هێنانی داتاکان لە Supabase
+    loadHistory();
   </script>
 </body>
 </html>
