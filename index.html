@@ -5,13 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>مێژووی گەلی کورد | کوردستان</title>
   
-  <!-- PWA & Mobile Web App Meta -->
   <meta name="theme-color" content="#d4af37">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="مێژووی کورد">
 
-  <!-- SEO & Social Media Preview -->
   <meta name="description" content="گەنجینەیەکی دەوڵەمەندی شارستانیەت و مێژووی کوردستان؛ لە سەردەمە دێرینەکان، سۆمەر و مادەوە تا میرنشینەکان و مێژووی هاوچەرخ.">
   <meta property="og:title" content="مێژووی گەلی کورد | کوردستان">
   <meta property="og:description" content="گەنجینەیەکی مێژوویی سەرچاوەدار دەربارەی سەردەم، شارستانییەت و میرنشینە سەربەخۆکانی کوردستان.">
@@ -19,10 +17,8 @@
   <meta property="og:url" content="https://kurdishhistory.netlify.app">
   <meta property="og:type" content="website">
 
-  <!-- فۆنت و ئایکۆنەکان -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   
   <style>
@@ -67,7 +63,6 @@
     }
 
     .brand { font-size: 1.3rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
-    
     .nav-left-actions { display: flex; align-items: center; gap: 12px; }
 
     .theme-btn {
@@ -201,7 +196,23 @@
     .search-box input:focus { border-color: var(--accent); }
     .search-box i { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--accent); }
 
-    /* بەشی نەخشەی ناوچە مێژووییەکان */
+    /* ئەمڕۆ لە مێژوودا */
+    .today-box {
+      max-width: 700px;
+      margin: 15px auto 25px;
+      background: rgba(212, 175, 55, 0.08);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      text-align: right;
+    }
+    .today-icon { font-size: 1.8rem; color: var(--accent); }
+    .today-content h4 { color: var(--accent); font-size: 0.95rem; margin-bottom: 4px; }
+    .today-content p { font-size: 0.9rem; color: var(--text-white); margin: 0; }
+
     .regions-box {
       max-width: 800px; margin: 0 auto 25px; padding: 12px;
       display: flex; justify-content: center; flex-wrap: wrap; gap: 8px;
@@ -212,7 +223,6 @@
     }
     .region-tag:hover { background: var(--accent); color: #000; }
 
-    /* فلتەرەکان */
     .filter-container {
       display: flex;
       justify-content: center;
@@ -244,7 +254,6 @@
       border-bottom: 2px solid var(--border); padding-bottom: 10px;
     }
 
-    /* هێڵی کاتیی گرافیکی (Timeline) */
     .timeline-wrapper {
       background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
       padding: 20px; margin-bottom: 35px; overflow-x: auto;
@@ -269,7 +278,6 @@
     .timeline-step span { font-size: 0.85rem; font-weight: 600; color: var(--text-white); display: block; }
     .timeline-step small { font-size: 0.75rem; color: #8b949e; }
 
-    /* کارتەکان */
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
     .card {
       background: var(--card-bg); border: 1px solid var(--border); border-radius: 14px;
@@ -293,10 +301,13 @@
       align-items: center;
       margin-bottom: 10px;
     }
+    .card-meta-left { display: flex; align-items: center; gap: 8px; }
     .card-era {
       display: inline-block; font-size: 0.8rem; font-weight: 700; color: var(--accent);
       background: rgba(212, 175, 55, 0.12); padding: 4px 10px; border-radius: 6px;
     }
+    .view-count { font-size: 0.78rem; color: #8b949e; display: flex; align-items: center; gap: 4px; }
+    
     .btn-fav {
       background: none; border: none; font-size: 1.15rem; cursor: pointer; color: #8b949e; transition: 0.2s;
     }
@@ -318,7 +329,6 @@
     .btn-delete { background: rgba(230, 57, 70, 0.85); color: #fff; }
     .btn-edit { background: rgba(46, 160, 67, 0.85); color: #fff; }
 
-    /* بەشی پرسیار و وەڵامی مێژوویی (Quiz) */
     .quiz-section {
       background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px;
       padding: 25px; margin-top: 45px; text-align: center;
@@ -362,14 +372,32 @@
     .modal-source i { color: var(--accent); margin-left: 6px; }
 
     .modal-footer-actions {
-      display: flex; gap: 10px; border-top: 1px solid var(--border); padding-top: 15px; flex-wrap: wrap;
+      display: flex; gap: 10px; border-top: 1px solid var(--border); padding-top: 15px; flex-wrap: wrap; margin-bottom: 25px;
     }
-    .btn-share, .btn-audio {
+    .btn-action-modal {
       background: transparent; border: 1px solid var(--accent); color: var(--accent);
       padding: 6px 14px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; font-weight: 600;
       display: flex; align-items: center; gap: 6px; transition: 0.2s;
     }
-    .btn-share:hover, .btn-audio:hover { background: var(--accent); color: #000; }
+    .btn-action-modal:hover { background: var(--accent); color: #000; }
+
+    /* بەشی لێدوانەکان (Comments) */
+    .comments-section {
+      border-top: 1px dashed var(--border);
+      padding-top: 20px;
+    }
+    .comments-section h3 { font-size: 1.1rem; color: var(--text-white); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .comment-form { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+    .comment-form input, .comment-form textarea {
+      width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; color: var(--text-white); font-size: 0.9rem;
+    }
+    .comment-list { display: flex; flex-direction: column; gap: 12px; }
+    .comment-item {
+      background: var(--bg); border: 1px solid var(--border); padding: 12px; border-radius: 8px;
+    }
+    .comment-author { font-weight: 700; color: var(--accent); font-size: 0.9rem; margin-bottom: 4px; display: flex; justify-content: space-between; }
+    .comment-time { font-size: 0.75rem; color: #8b949e; font-weight: normal; }
+    .comment-text { font-size: 0.9rem; color: var(--text); }
 
     .form-group { margin-bottom: 16px; }
     .form-group label { display: block; margin-bottom: 6px; font-size: 0.9rem; color: var(--text); }
@@ -402,6 +430,13 @@
 
     @media (max-width: 600px) {
       .quiz-options { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body * { visibility: hidden; }
+      #viewModal, #viewModal * { visibility: visible; }
+      #viewModal { position: absolute; left: 0; top: 0; width: 100%; background: #fff !important; color: #000 !important; }
+      .modal-footer-actions, .comments-section, .close-modal { display: none !important; }
     }
   </style>
 </head>
@@ -461,7 +496,15 @@
       <input type="text" id="searchInput" placeholder="گەڕان بەناو میرنشین، ساڵ و مێژووەکان..." onkeyup="filterCards()">
     </div>
 
-    <!-- بەستەری خێرای ناوچە و میرنشینەکان -->
+    <!-- ئەمڕۆ لە مێژوودا -->
+    <div class="today-box">
+      <div class="today-icon"><i class="fa-solid fa-calendar-check"></i></div>
+      <div class="today-content">
+        <h4>ئەمڕۆ لە مێژووی کوردستاندا:</h4>
+        <p id="todayFactText">ڕووداوەکان باردەکرێن...</p>
+      </div>
+    </div>
+
     <div class="regions-box">
       <span class="region-tag" onclick="quickSearch('ماد')"><i class="fa-solid fa-location-dot"></i> ئیمپراتۆریەتی ماد</span>
       <span class="region-tag" onclick="quickSearch('سۆران')"><i class="fa-solid fa-location-dot"></i> میرنشینی سۆران</span>
@@ -484,7 +527,6 @@
 
   <div class="container">
     
-    <!-- هێڵی کاتیی گرافیکی (Timeline) -->
     <div class="timeline-wrapper">
       <div class="timeline-title"><i class="fa-solid fa-timeline"></i> هێڵی کاتیی سەردەمە گرنگەکانی کوردستان</div>
       <div class="timeline-steps">
@@ -527,7 +569,6 @@
       <div class="loading-msg"><i class="fa-solid fa-spinner fa-spin"></i> زانیارییەکان لە داتابەیسەوە دادەبەزن...</div>
     </div>
 
-    <!-- بەشی تاقیکردنەوەی مێژوویی (Quiz) -->
     <div class="quiz-section">
       <div class="quiz-title"><i class="fa-solid fa-graduation-cap"></i> تاقیکردنەوەی خێرای مێژوویی</div>
       <p style="color: var(--text); font-size: 0.95rem;">زانیارییە مێژووییەکانت لەسەر گەلی کورد تاقی بکەرەوە!</p>
@@ -551,14 +592,28 @@
         <span>سەرچاوە: </span>
         <strong id="viewSource"></strong>
       </div>
+      
+      <!-- کردارەکانی مۆداڵ (هاوبەشکردن و چاپ/PDF) -->
       <div class="modal-footer-actions">
-        <button class="btn-share" onclick="shareCurrentArticle()">
+        <button class="btn-action-modal" onclick="shareCurrentArticle()">
           <i class="fa-solid fa-share-nodes"></i> هاوبەشکردنی بابەت
         </button>
-        <button class="btn-audio" onclick="toggleReadAudio()">
-          <i class="fa-solid fa-volume-high" id="audioIcon"></i> <span id="audioBtnText">خوێندنەوەی دەنگی</span>
+        <button class="btn-action-modal" onclick="window.print()">
+          <i class="fa-solid fa-file-pdf"></i> دابەزاندن / چاپی PDF
         </button>
       </div>
+
+      <!-- بەشی لێدوانەکان -->
+      <div class="comments-section">
+        <h3><i class="fa-solid fa-comments"></i> بۆچوونی خوێنەران</h3>
+        <div class="comment-form">
+          <input type="text" id="commentAuthor" placeholder="ناوی بەڕێزت...">
+          <textarea id="commentText" rows="2" placeholder="بۆچوون یان زانیاری زیاتر بنووسە..."></textarea>
+          <button class="btn" style="background:var(--accent); color:#000; align-self: flex-start; padding: 6px 14px;" onclick="addComment()">ناردنی بۆچوون</button>
+        </div>
+        <div class="comment-list" id="commentsContainer"></div>
+      </div>
+
     </div>
   </div>
 
@@ -606,12 +661,23 @@
 
     let historyItems = [];
     let favorites = JSON.parse(localStorage.getItem('kurdish_history_favs')) || [];
+    let viewCounts = JSON.parse(localStorage.getItem('kurdish_history_views')) || {};
+    let itemComments = JSON.parse(localStorage.getItem('kurdish_history_comments')) || {};
     let isAdmin = false;
     let currentFilter = 'all';
     let currentViewingItem = null;
-    let isSpeaking = false;
 
-    // گۆڕینی دۆخی ڕووناک/تاریک
+    // ڕووداوەکانی ئەمڕۆ لە مێژوودا
+    const todayEvents = [
+      "دامەزراندنی کۆماری دیموکراتی کوردستان لە مەهاباد لە ساڵی ١٩٤٦.",
+      "سەرکەوتنی گەورەی مادەکان و کۆتاییهێنان بە دەسەڵاتی ئیمپراتۆریەتی ئاشوور لە نەینەوا (٦١٢ پ.ز).",
+      "ڕزگارکردنی قودس لە دەست خاچپەرستان لەلایەن سوڵتان سەڵاحەدینی ئەییووبی لە ساڵی ١١٨٧ ز.",
+      "سەرهەڵدانی شۆڕشی شێخ مەحمودی حەفید لە ساڵی ١٩١٩ بۆ بەدەستهێنانی سەربەخۆیی کوردستان.",
+      "تەواوکردنی نووسینەوەی شەرەفنامە لەلایەن شەرەفخانی بەدلیسی لە ساڵی ١٥٩٧ ز وەک گەورەترین مێژووی کورد."
+    ];
+    document.getElementById("todayFactText").innerText = todayEvents[Math.floor(Math.random() * todayEvents.length)];
+
+    // دۆخی ڕووناک/تاریک
     function toggleTheme() {
       const html = document.documentElement;
       const currentTheme = html.getAttribute('data-theme');
@@ -727,6 +793,7 @@
           : '';
 
         const isFav = favorites.includes(item.id);
+        const count = viewCounts[item.id] || 0;
 
         card.innerHTML = `
           ${imageHtml}
@@ -740,7 +807,10 @@
           </div>
           <div class="card-content-wrap">
             <div class="card-top-meta">
-              <span class="card-era">${item.era}</span>
+              <div class="card-meta-left">
+                <span class="card-era">${item.era}</span>
+                <span class="view-count"><i class="fa-solid fa-eye"></i> ${count}</span>
+              </div>
               <button class="btn-fav ${isFav ? 'active' : ''}" onclick="toggleFavorite(${item.id}, event)" title="${isFav ? 'لابردن لە دڵخوازەکان' : 'زیادکردن بۆ دڵخوازەکان'}">
                 <i class="${isFav ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
               </button>
@@ -767,7 +837,7 @@
     function quickSearch(word) {
       document.getElementById("searchInput").value = word;
       filterCards();
-      window.scrollTo({ top: 350, behavior: 'smooth' });
+      window.scrollTo({ top: 400, behavior: 'smooth' });
     }
 
     function filterCards() {
@@ -790,6 +860,12 @@
 
     function openViewModal(item) {
       currentViewingItem = item;
+      
+      // زیادکردنی ژمارەی بینەر
+      viewCounts[item.id] = (viewCounts[item.id] || 0) + 1;
+      localStorage.setItem('kurdish_history_views', JSON.stringify(viewCounts));
+      renderCards(historyItems);
+
       document.getElementById("viewTitle").innerText = item.title;
       document.getElementById("viewEra").innerText = item.era;
       document.getElementById("viewContent").innerText = item.content;
@@ -810,12 +886,11 @@
         sourceWrap.style.display = "none";
       }
 
-      stopSpeech();
+      renderComments(item.id);
       document.getElementById("viewModal").style.display = "flex";
     }
 
     function closeViewModal() {
-      stopSpeech();
       document.getElementById("viewModal").style.display = "none";
       currentViewingItem = null;
     }
@@ -836,34 +911,56 @@
       }
     }
 
-    // سیستەمی دەنگ (Text to Speech)
-    function toggleReadAudio() {
-      if (!currentViewingItem) return;
-      if (isSpeaking) {
-        stopSpeech();
-      } else {
-        const text = `${currentViewingItem.title}. ${currentViewingItem.content}`;
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'ckb';
-        utterance.onend = stopSpeech;
-        utterance.onerror = stopSpeech;
-        window.speechSynthesis.speak(utterance);
-        isSpeaking = true;
-        document.getElementById("audioBtnText").innerText = "ڕاگرتنی دەنگ";
-        document.getElementById("audioIcon").className = "fa-solid fa-circle-stop";
+    // لێدوانەکان
+    function renderComments(itemId) {
+      const container = document.getElementById("commentsContainer");
+      container.innerHTML = "";
+      const comments = itemComments[itemId] || [];
+
+      if (comments.length === 0) {
+        container.innerHTML = '<div style="color:#8b949e; font-size:0.85rem;">هیچ بۆچوونێک نییە، یەکەم کەس بە بۆچوونەکەت بنووسە.</div>';
+        return;
       }
+
+      comments.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "comment-item";
+        div.innerHTML = `
+          <div class="comment-author">
+            <span>${c.author}</span>
+            <span class="comment-time">${c.time}</span>
+          </div>
+          <div class="comment-text">${c.text}</div>
+        `;
+        container.appendChild(div);
+      });
     }
 
-    function stopSpeech() {
-      if (window.speechSynthesis) window.speechSynthesis.cancel();
-      isSpeaking = false;
-      const btn = document.getElementById("audioBtnText");
-      if (btn) btn.innerText = "خوێندنەوەی دەنگی";
-      const icon = document.getElementById("audioIcon");
-      if (icon) icon.className = "fa-solid fa-volume-high";
+    function addComment() {
+      if (!currentViewingItem) return;
+      const author = document.getElementById("commentAuthor").value.trim() || "خوێنەر";
+      const text = document.getElementById("commentText").value.trim();
+
+      if (!text) {
+        alert("تکایە دەقی بۆچوونەکەت بنووسە.");
+        return;
+      }
+
+      const itemId = currentViewingItem.id;
+      if (!itemComments[itemId]) itemComments[itemId] = [];
+
+      itemComments[itemId].push({
+        author: author,
+        text: text,
+        time: new Date().toLocaleDateString('ku')
+      });
+
+      localStorage.setItem('kurdish_history_comments', JSON.stringify(itemComments));
+      document.getElementById("commentText").value = "";
+      renderComments(itemId);
     }
 
-    // بەشی پرسیار و وەڵامەکان (Quiz System)
+    // تاقیکردنەوەی Quiz
     const quizData = [
       {
         q: "پایتەختی ئیمپراتۆریەتیی ماد کام شارە بووە؟",
