@@ -259,9 +259,6 @@
         <button class="btn btn-add" id="addBtn" onclick="openAddModal()">
           <i class="fa-solid fa-plus"></i> زیادکردنی بابەت
         </button>
-        <button class="btn" id="adminToggleBtn" onclick="toggleAdmin()">
-          <i class="fa-solid fa-lock"></i> دۆخی بەڕێوەبەر
-        </button>
       </div>
       <!-- دوگمەی سێ هێڵی لە دەستە چەپ -->
       <button class="menu-toggle" onclick="toggleMenu()" title="مێنیو">
@@ -328,6 +325,9 @@
     const SUPABASE_KEY = "sb_publishable_5C1ul9IuxiFRGByPb6VQjg_P5yXfhMW";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+    // ئیمەیڵی تایبەتیی تۆ وەک بەڕێوەبەر
+    const ADMIN_EMAIL = "kovanhwmar@gmail.com";
+
     let historyItems = [];
     let isAdmin = false;
 
@@ -342,7 +342,7 @@
       const { error } = await client.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: window.location.origin
+          redirectTo: 'https://kurdishhistory.netlify.app'
         }
       });
       if (error) {
@@ -356,17 +356,29 @@
       window.location.reload();
     }
 
-    // پشکنینی ئۆتۆماتیکی دۆخی هەژمار
+    // پشکنینی خۆکارانەی هەژمار و دەسەڵاتی بەڕێوەبەر
     async function checkAuth() {
       const { data: { user } } = await client.auth.getUser();
       if (user) {
         document.getElementById("loggedOutSection").style.display = "none";
         document.getElementById("loggedInSection").style.display = "block";
         document.getElementById("userEmailText").innerText = user.user_metadata.full_name || user.email;
+
+        // ئەگەر ئەو ئیمەیڵەی چووەتە ژوورەوە هەمان ئیمەیڵی خۆت بوو
+        if (user.email && user.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
+          isAdmin = true;
+          document.getElementById("addBtn").style.display = "inline-flex";
+        } else {
+          isAdmin = false;
+          document.getElementById("addBtn").style.display = "none";
+        }
       } else {
+        isAdmin = false;
         document.getElementById("loggedOutSection").style.display = "block";
         document.getElementById("loggedInSection").style.display = "none";
+        document.getElementById("addBtn").style.display = "none";
       }
+      renderCards(historyItems);
     }
 
     // دابەزاندنی داتاکان لە داتابەیسی سەرهێڵەوە
@@ -464,25 +476,6 @@
         item.era.toLowerCase().includes(val)
       );
       renderCards(filtered);
-    }
-
-    function toggleAdmin() {
-      if (!isAdmin) {
-        const pass = prompt("وشەی نهێنی بەڕێوەبەر بنووسە:");
-        if (pass === "1234") {
-          isAdmin = true;
-          document.getElementById("addBtn").style.display = "inline-flex";
-          document.getElementById("adminToggleBtn").innerHTML = '<i class="fa-solid fa-unlock"></i> بەڕێوەبەر چالاکە';
-          renderCards(historyItems);
-        } else if (pass !== null) {
-          alert("وشەی نهێنی هەڵەیە!");
-        }
-      } else {
-        isAdmin = false;
-        document.getElementById("addBtn").style.display = "none";
-        document.getElementById("adminToggleBtn").innerHTML = '<i class="fa-solid fa-lock"></i> دۆخی بەڕێوەبەر';
-        renderCards(historyItems);
-      }
     }
 
     function openViewModal(item) {
