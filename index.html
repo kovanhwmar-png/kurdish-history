@@ -24,7 +24,7 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Vazirmatn', sans-serif; }
-    body { background-color: var(--bg); color: var(--text); line-height: 1.8; padding-bottom: 60px; }
+    body { background-color: var(--bg); color: var(--text); line-height: 1.8; padding-bottom: 60px; overflow-x: hidden; }
 
     header {
       background: rgba(22, 27, 34, 0.95);
@@ -41,6 +41,105 @@
 
     .brand { font-size: 1.3rem; font-weight: 800; color: var(--accent); display: flex; align-items: center; gap: 10px; }
     
+    .nav-left-actions { display: flex; align-items: center; gap: 15px; }
+
+    /* هێمای سێ هێڵ لە سەرەوە لای چەپ */
+    .menu-toggle {
+      background: none;
+      border: none;
+      color: var(--accent);
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px;
+      transition: 0.2s;
+    }
+    .menu-toggle:hover { color: #fff; transform: scale(1.08); }
+
+    /* مێنیوی لاوەکی */
+    .side-drawer {
+      position: fixed;
+      top: 0;
+      left: -310px;
+      width: 290px;
+      height: 100%;
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
+      z-index: 1050;
+      transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 6px 0 25px rgba(0, 0, 0, 0.6);
+    }
+    .side-drawer.active { left: 0; }
+
+    .drawer-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(3px);
+      z-index: 1040;
+    }
+    .drawer-overlay.active { display: block; }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+    .drawer-header h3 { color: var(--accent); font-size: 1.15rem; display: flex; align-items: center; gap: 8px; }
+    .close-drawer { background: none; border: none; color: #8b949e; font-size: 1.4rem; cursor: pointer; }
+    .close-drawer:hover { color: #fff; }
+
+    /* دوگمەی چوونەژوورەوەی گووگڵ لە مێنیودا */
+    .btn-google {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 12px 14px;
+      background: #ffffff;
+      color: #1f1f1f;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .btn-google img { width: 20px; height: 20px; }
+    .btn-google:hover { background: #f2f2f2; transform: translateY(-2px); }
+
+    .user-box {
+      background: #0d1117;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .user-box p { font-size: 0.95rem; color: #fff; margin-bottom: 12px; word-break: break-all; }
+    .btn-logout {
+      width: 100%;
+      background: rgba(230, 57, 70, 0.15);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+      padding: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .btn-logout:hover { background: var(--danger); color: #fff; }
+
     .admin-controls { display: flex; gap: 10px; }
     .btn {
       background: transparent; border: 1px solid var(--accent); color: var(--accent);
@@ -122,14 +221,51 @@
 </head>
 <body>
 
+  <!-- پەردەی ڕەشی پشتەوە بۆ مێنیو -->
+  <div class="drawer-overlay" id="drawerOverlay" onclick="toggleMenu()"></div>
+
+  <!-- مێنیوی دەستە چەپ -->
+  <div class="side-drawer" id="sideDrawer">
+    <div class="drawer-header">
+      <h3><i class="fa-solid fa-bars"></i> بەشەکان</h3>
+      <button class="close-drawer" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <!-- بەشی چوونەژوورەوەی گۆگڵ -->
+    <div id="loggedOutSection">
+      <p style="color: #8b949e; font-size: 0.9rem; margin-bottom: 14px;">چوونەژوورەوە لە ڕێگەی هەژمار:</p>
+      <button class="btn-google" onclick="loginWithGoogle()">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google">
+        <span>چوونەژوورەوە بە گووگڵ</span>
+      </button>
+    </div>
+
+    <div id="loggedInSection" style="display: none;">
+      <div class="user-box">
+        <i class="fa-solid fa-circle-user" style="font-size: 2.2rem; color: var(--accent); margin-bottom: 8px;"></i>
+        <p id="userEmailText"></p>
+        <button class="btn-logout" onclick="logout()">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i> دەرچوون لە هەژمار
+        </button>
+      </div>
+    </div>
+  </div>
+
   <header>
     <div class="brand"><i class="fa-solid fa-feather-pointed"></i> مێژووی گەلی کورد</div>
-    <div class="admin-controls">
-      <button class="btn btn-add" id="addBtn" onclick="openAddModal()">
-        <i class="fa-solid fa-plus"></i> زیادکردنی بابەت
-      </button>
-      <button class="btn" id="adminToggleBtn" onclick="toggleAdmin()">
-        <i class="fa-solid fa-lock"></i> دۆخی بەڕێوەبەر
+    
+    <div class="nav-left-actions">
+      <div class="admin-controls">
+        <button class="btn btn-add" id="addBtn" onclick="openAddModal()">
+          <i class="fa-solid fa-plus"></i> زیادکردنی بابەت
+        </button>
+        <button class="btn" id="adminToggleBtn" onclick="toggleAdmin()">
+          <i class="fa-solid fa-lock"></i> دۆخی بەڕێوەبەر
+        </button>
+      </div>
+      <!-- دوگمەی سێ هێڵی لە دەستە چەپ -->
+      <button class="menu-toggle" onclick="toggleMenu()" title="مێنیو">
+        <i class="fa-solid fa-bars"></i>
       </button>
     </div>
   </header>
@@ -187,13 +323,51 @@
   </div>
 
   <script>
-    // ڕێکخستنی Supabase بە بەستەر و کلیلی ڕاستەقینە
+    // ڕێکخستنی Supabase بە بەستەر و کلیلەکەت
     const SUPABASE_URL = "https://dptgvascyofbbnjcqfly.supabase.co";
     const SUPABASE_KEY = "sb_publishable_5C1ul9IuxiFRGByPb6VQjg_P5yXfhMW";
     const client = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let historyItems = [];
     let isAdmin = false;
+
+    // کردارەکانی مێنیوی لاوەکی
+    function toggleMenu() {
+      document.getElementById("sideDrawer").classList.toggle("active");
+      document.getElementById("drawerOverlay").classList.toggle("active");
+    }
+
+    // چوونەژوورەوە بە گووگڵ لە ڕێگەی Supabase
+    async function loginWithGoogle() {
+      const { error } = await client.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: window.location.origin
+        }
+      });
+      if (error) {
+        alert("هەڵە ڕوویدا لە چوونەژوورەوە: " + error.message);
+      }
+    }
+
+    // دەرچوون لە هەژمار
+    async function logout() {
+      await client.auth.signOut();
+      window.location.reload();
+    }
+
+    // پشکنینی ئۆتۆماتیکی دۆخی هەژمار
+    async function checkAuth() {
+      const { data: { user } } = await client.auth.getUser();
+      if (user) {
+        document.getElementById("loggedOutSection").style.display = "none";
+        document.getElementById("loggedInSection").style.display = "block";
+        document.getElementById("userEmailText").innerText = user.user_metadata.full_name || user.email;
+      } else {
+        document.getElementById("loggedOutSection").style.display = "block";
+        document.getElementById("loggedInSection").style.display = "none";
+      }
+    }
 
     // دابەزاندنی داتاکان لە داتابەیسی سەرهێڵەوە
     async function loadHistory() {
@@ -205,7 +379,6 @@
 
         if (error) throw error;
 
-        // ئەگەر داتابەیسەکە تازە بێت و بەتاڵ بێت، چەند زانیارییەکی سەرەتایی تێدەکات
         if (!data || data.length === 0) {
           await insertInitialData();
           return;
@@ -364,7 +537,6 @@
 
       try {
         if (id) {
-          // نوێکردنەوە لە Supabase
           const { error } = await client
             .from('kurdish_history')
             .update({ title, era, content })
@@ -372,7 +544,6 @@
 
           if (error) throw error;
         } else {
-          // تۆمارکردنی نوێ لە Supabase
           const { error } = await client
             .from('kurdish_history')
             .insert([{ title, era, content }]);
@@ -406,8 +577,9 @@
       }
     }
 
-    // دەستپێکردنی هێنانی داتاکان لە Supabase
+    // دەستپێکردنی کارەکان
     loadHistory();
+    checkAuth();
   </script>
 </body>
 </html>
